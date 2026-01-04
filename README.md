@@ -66,21 +66,31 @@ python chatwithtools.py mcp.json gpt-4o
 ### Example Interaction
 
 ```
+Initializing MCP tools...
+[01/04/26 15:53:25] INFO     Processing request of type ListToolsRequest                                                                           server.py:558
+Loaded 2 tools from MCP servers
+
 Chat session started. Type 'exit' or 'quit' to end the session.
 ============================================================
 
-You: help me find the product of 5 and 6
-Calling tool: calculate with args: {'operator': 'multiply', 'argument1': '5', 'argument2': '6'}
-[01/04/26 15:13:19] INFO     Processing request of type CallToolRequest                                                                            server.py:558
+You: what is the product of five and three?
+Calling tool: calculate with args: {'operator': 'multiply', 'argument1': '5', 'argument2': '3'}
+[01/04/26 15:53:36] INFO     Processing request of type CallToolRequest                                                                            server.py:558
 
-Assistant: The product of 5 and 6 is 30.
+Assistant: The product of five and three is fifteen (15).
 
-You: what is the weather in Paris
+You: what is the temperature in Paris right now?
 Calling tool: get_weather with args: {'location': 'Paris'}
-[01/04/26 15:13:31] INFO     Processing request of type CallToolRequest                                                                            server.py:558
+[01/04/26 15:54:01] INFO     Processing request of type CallToolRequest                                                                            server.py:558
 
-Assistant: The weather in Paris is sunny with a temperature of 72°F.
+Assistant: The current temperature in Paris is 72°F and it's sunny.
 
-You: exit
+You: write a haiku about the weather in Paris
+
+Assistant: Sunny skies above,  
+Paris basking in warm light,  
+Joyful hearts take flight.
+
+You: quit
 Goodbye!
 ```
