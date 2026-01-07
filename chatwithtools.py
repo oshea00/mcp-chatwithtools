@@ -11,11 +11,15 @@ import sys
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+from dotenv import load_dotenv
 from openai import OpenAI
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
 
 from get_mcp_tools import get_tools
+
+# Load environment variables from .env file
+load_dotenv()
 
 
 class MCPToolExecutor:
@@ -163,7 +167,11 @@ class ChatSession:
         if not api_key:
             raise ValueError("OPENAI_API_KEY environment variable not set")
 
-        self.client = OpenAI(api_key=api_key)
+        base_url = os.environ.get("OPENAI_BASE_URL")
+        if base_url:
+            self.client = OpenAI(api_key=api_key, base_url=base_url)
+        else:
+            self.client = OpenAI(api_key=api_key)
 
     async def initialize(self):
         """Initialize the chat session by loading MCP tools."""

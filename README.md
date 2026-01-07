@@ -53,8 +53,10 @@ pip install "gradio[mcp]>=5.34.0" "openai>=2.14.0"
 The main example demonstrating the "tools with chat" pattern:
 
 ```bash
-# Set your OpenAI API key
+# Set your OpenAI API key (also supports .env)
 export OPENAI_API_KEY="your-api-key-here"
+# Optional set alternative API base URL
+export OPENAI_BASE_URL="your-alt-url/v1 here"
 
 # Run with default model (gpt-4o-mini)
 python chatwithtools.py mcp.json
