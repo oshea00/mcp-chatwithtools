@@ -114,9 +114,15 @@ Used by `chatwithtools.py` and `get_mcp_tools.py` to connect to servers.
 ## Dependencies
 
 Core dependencies (from pyproject.toml):
-- `gradio[mcp]>=5.34.0` - Web UI framework with MCP support
+- `fastmcp>=0.1.0` - FastMCP framework for building MCP servers (used in server.py)
+- `gradio[mcp]>=5.34.0` - Web UI framework with MCP support (includes MCP SDK client)
 - `openai>=2.14.0` - OpenAI API client
-- MCP SDK (via gradio[mcp]): `mcp`, `aiofiles` for async MCP operations
+- `python-dotenv>=1.0.0` - Environment variable management
+
+**MCP Architecture**:
+- **Server-side**: Uses FastMCP framework for easy server implementation (server.py)
+- **Client-side**: Uses standard MCP SDK client for connecting to servers (chatwithtools.py, get_mcp_tools.py)
+- Both FastMCP and gradio[mcp] provide the necessary MCP protocol dependencies
 
 ## Important Notes
 
