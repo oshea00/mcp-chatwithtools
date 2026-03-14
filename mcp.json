@@ -4,6 +4,11 @@
       "command": "python3",
       "args": ["server.py"],
       "env": {}
+    },
+    "timeutils": {
+      "command": "uvx",
+      "args": ["mcp-server-time"],
+      "env": {}
     }
   }
 }

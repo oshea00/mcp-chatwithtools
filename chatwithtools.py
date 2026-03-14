@@ -259,11 +259,53 @@ class ChatSession:
 
         return assistant_message.content
 
+    def handle_slash_command(self, command: str) -> bool:
+        """
+        Handle a slash command. Returns True if command was handled.
+
+        Args:
+            command: The slash command string (e.g. '/tools')
+        """
+        parts = command.strip().split()
+        cmd = parts[0].lower()
+
+        if cmd == "/exit":
+            print("Goodbye!")
+            sys.exit(0)
+
+        if cmd == "/tools":
+            if not self.tools:
+                print("No tools loaded.")
+            else:
+                print(f"\n{len(self.tools)} tool(s) available:")
+                for tool in self.tools:
+                    fn = tool["function"]
+                    name = fn.get("name", "")
+                    desc = fn.get("description", "(no description)")
+                    params = fn.get("parameters", {}).get("properties", {})
+                    required = fn.get("parameters", {}).get("required", [])
+                    print(f"\n  {name}")
+                    print(f"    {desc}")
+                    if params:
+                        print("    Arguments:")
+                        for arg_name, arg_info in params.items():
+                            arg_type = arg_info.get("type", "any")
+                            arg_desc = arg_info.get("description", "")
+                            req = " (required)" if arg_name in required else ""
+                            print(f"      {arg_name}: {arg_type}{req} - {arg_desc}")
+            print()
+            return True
+
+        print(f"Unknown command: {cmd}")
+        print()
+        return True
+
     async def run(self):
         """Run the interactive chat loop."""
         await self.initialize()
 
-        print("Chat session started. Type 'exit' or 'quit' to end the session.")
+        print("Chat session started. Type '/exit' to end the session.")
+        print("Type '/tools' to list available tools.")
         print("=" * 60)
         print()
 
@@ -275,9 +317,9 @@ class ChatSession:
                 if not user_input:
                     continue
 
-                if user_input.lower() in ["exit", "quit"]:
-                    print("Goodbye!")
-                    break
+                if user_input.startswith("/"):
+                    self.handle_slash_command(user_input)
+                    continue
 
                 # Send message and get response
                 response = await self.send_message(user_input)
