@@ -20,8 +20,7 @@ from mcp.client.stdio import stdio_client
 
 from get_mcp_tools import get_tools
 
-# Load environment variables from .env file
-load_dotenv()
+load_dotenv(override=True)
 
 
 class MCPToolExecutor:
