@@ -246,9 +246,9 @@ sequenceDiagram
     Chat->>User: "The weather in Paris is<br/>sunny with 72°F"
 ```
 
-### Multi-Tool Flow
+### Multi-Tool Sequential Flow
 
-This diagram shows how multiple tool calls are handled in parallel:
+This diagram shows how multiple tool calls are handled sequentially:
 
 ```mermaid
 sequenceDiagram

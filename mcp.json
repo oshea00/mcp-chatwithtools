@@ -7,7 +7,7 @@
     },
     "timeutils": {
       "command": "uvx",
-      "args": ["mcp-server-time"],
+      "args": ["mcp-server-time@2026.1.26"],
       "env": {}
     }
   }
