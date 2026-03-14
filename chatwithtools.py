@@ -7,7 +7,9 @@ This module provides an interactive chat session using OpenAI that can call MCP 
 import asyncio
 import json
 import os
+import shutil
 import sys
+import textwrap
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -259,6 +261,25 @@ class ChatSession:
 
         return assistant_message.content
 
+    @staticmethod
+    def _print_table_divider(col_widths: tuple, char: str = "-"):
+        parts = [char * (w + 2) for w in col_widths]
+        print("+" + "+".join(parts) + "+")
+
+    @staticmethod
+    def _print_table_row(cells: tuple, col_widths: tuple, header: bool = False):
+        wrapped = [textwrap.wrap(str(c), w) or [""] for c, w in zip(cells, col_widths)]
+        height = max(len(w) for w in wrapped)
+        if header:
+            ChatSession._print_table_divider(col_widths)
+        for line_idx in range(height):
+            row = ""
+            for col_idx, w in enumerate(col_widths):
+                cell_line = wrapped[col_idx][line_idx] if line_idx < len(wrapped[col_idx]) else ""
+                row += f"| {cell_line:<{w}} "
+            print(row + "|")
+        ChatSession._print_table_divider(col_widths)
+
     def handle_slash_command(self, command: str) -> bool:
         """
         Handle a slash command. Returns True if command was handled.
@@ -277,22 +298,32 @@ class ChatSession:
             if not self.tools:
                 print("No tools loaded.")
             else:
-                print(f"\n{len(self.tools)} tool(s) available:")
+                print(f"\n{len(self.tools)} tool(s) available:\n")
+                term_width = shutil.get_terminal_size().columns
+                # 4 borders (|) + 3×2 padding spaces = 10 overhead chars
+                usable = max(term_width - 10, 30)
+                # distribute: name 24%, description 38%, arguments 38%
+                col_widths = (
+                    max(6, int(usable * 0.24)),
+                    max(10, int(usable * 0.38)),
+                    max(10, usable - int(usable * 0.24) - int(usable * 0.38)),
+                )
+                self._print_table_row(("Name", "Description", "Arguments"), col_widths, header=True)
                 for tool in self.tools:
                     fn = tool["function"]
                     name = fn.get("name", "")
                     desc = fn.get("description", "(no description)")
                     params = fn.get("parameters", {}).get("properties", {})
                     required = fn.get("parameters", {}).get("required", [])
-                    print(f"\n  {name}")
-                    print(f"    {desc}")
-                    if params:
-                        print("    Arguments:")
-                        for arg_name, arg_info in params.items():
-                            arg_type = arg_info.get("type", "any")
-                            arg_desc = arg_info.get("description", "")
-                            req = " (required)" if arg_name in required else ""
-                            print(f"      {arg_name}: {arg_type}{req} - {arg_desc}")
+                    args_parts = []
+                    for arg_name, arg_info in params.items():
+                        arg_type = arg_info.get("type", "any")
+                        arg_desc = arg_info.get("description", "")
+                        req = "*" if arg_name in required else ""
+                        args_parts.append(f"{arg_name}{req}:{arg_type} {arg_desc}".strip())
+                    args_text = "  ".join(args_parts) if args_parts else "-"
+                    self._print_table_row((name, desc, args_text), col_widths)
+                self._print_table_divider(col_widths)
             print()
             return True
 
@@ -327,7 +358,7 @@ class ChatSession:
                 print(f"\nAssistant: {response}")
                 print()
 
-            except KeyboardInterrupt:
+            except (KeyboardInterrupt, EOFError):
                 print("\nGoodbye!")
                 break
             except Exception as e:
