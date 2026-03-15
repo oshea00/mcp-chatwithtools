@@ -190,6 +190,7 @@ The system uses an `mcp.json` configuration file that defines MCP servers:
 ### Initialization Sequence
 
 This diagram shows how MCP tools are discovered and formatted for OpenAI during startup:
+![intialization flow](images/initialize-flow.gif)
 
 ```mermaid
 sequenceDiagram
@@ -239,6 +240,8 @@ sequenceDiagram
 
 ### Standard Message Flow (No Tools)
 
+![standard flow](images/standardflow.gif)
+
 ```mermaid
 sequenceDiagram
     participant User
@@ -254,6 +257,7 @@ sequenceDiagram
 ### Tool-Assisted Message Flow
 
 This diagram shows the complete sequence when OpenAI requests tool execution:
+![mcp tool flow](images/sequence-animation.gif)
 
 ```mermaid
 sequenceDiagram
