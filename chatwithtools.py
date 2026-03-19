@@ -274,7 +274,11 @@ class ChatSession:
         for line_idx in range(height):
             row = ""
             for col_idx, w in enumerate(col_widths):
-                cell_line = wrapped[col_idx][line_idx] if line_idx < len(wrapped[col_idx]) else ""
+                cell_line = (
+                    wrapped[col_idx][line_idx]
+                    if line_idx < len(wrapped[col_idx])
+                    else ""
+                )
                 row += f"| {cell_line:<{w}} "
             print(row + "|")
         ChatSession._print_table_divider(col_widths)
@@ -307,7 +311,9 @@ class ChatSession:
                     max(10, int(usable * 0.38)),
                     max(10, usable - int(usable * 0.24) - int(usable * 0.38)),
                 )
-                self._print_table_row(("Name", "Description", "Arguments"), col_widths, header=True)
+                self._print_table_row(
+                    ("Name", "Description", "Arguments"), col_widths, header=True
+                )
                 for tool in self.tools:
                     fn = tool["function"]
                     name = fn.get("name", "")
@@ -319,7 +325,9 @@ class ChatSession:
                         arg_type = arg_info.get("type", "any")
                         arg_desc = arg_info.get("description", "")
                         req = "*" if arg_name in required else ""
-                        args_parts.append(f"{arg_name}{req}:{arg_type} {arg_desc}".strip())
+                        args_parts.append(
+                            f"{arg_name}{req}:{arg_type} {arg_desc}".strip()
+                        )
                     args_text = "  ".join(args_parts) if args_parts else "-"
                     self._print_table_row((name, desc, args_text), col_widths)
                 self._print_table_divider(col_widths)
@@ -373,7 +381,7 @@ async def main():
         sys.exit(1)
 
     config_path = sys.argv[1]
-    model = sys.argv[2] if len(sys.argv) > 2 else "gpt-4o-mini"
+    model = sys.argv[2] if len(sys.argv) > 2 else "gpt-4o"
 
     try:
         chat = ChatSession(config_path, model)

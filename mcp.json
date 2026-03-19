@@ -3,7 +3,9 @@
     "utilities": {
       "command": "python3",
       "args": ["server.py"],
-      "env": {}
+      "env": {
+        "WEATHER_BASE_URL":"http://localhost:8008"
+      }
     },
     "timeutils": {
       "command": "uvx",

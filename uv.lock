@@ -1,5 +1,5 @@
 version = 1
-revision = 3
+revision = 2
 requires-python = ">=3.12"
 resolution-markers = [
     "python_full_version >= '3.13'",
@@ -226,6 +226,7 @@ version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
     { name = "aiofiles" },
+    { name = "httpx" },
     { name = "mcp" },
     { name = "openai" },
     { name = "python-dotenv" },
@@ -234,6 +235,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "aiofiles", specifier = ">=24.1.0" },
+    { name = "httpx", specifier = ">=0.28.1" },
     { name = "mcp", specifier = ">=1.9.3" },
     { name = "openai", specifier = ">=2.14.0" },
     { name = "python-dotenv", specifier = ">=1.0.0" },
