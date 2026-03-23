@@ -11,6 +11,9 @@
       "command": "uvx",
       "args": ["mcp-server-time@2026.1.26"],
       "env": {}
+    },
+    "pricing": {
+      "url": "http://localhost:5000/mcp"
     }
   }
 }

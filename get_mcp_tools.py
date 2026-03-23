@@ -13,6 +13,8 @@ from typing import Any, Dict, List
 import aiofiles
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
+from mcp.client.sse import sse_client
+from mcp.client.streamable_http import streamablehttp_client
 
 
 async def get_tools_from_server(
@@ -28,7 +30,27 @@ async def get_tools_from_server(
     Returns:
         Dictionary with server name and list of tools
     """
+    async def _list_tools(session: ClientSession) -> Dict[str, Any]:
+        await session.initialize()
+        tools_list = await session.list_tools()
+        tools = []
+        for tool in tools_list.tools:
+            tool_info = {
+                "name": tool.name,
+                "description": tool.description,
+            }
+            if hasattr(tool, "inputSchema"):
+                tool_info["inputSchema"] = tool.inputSchema
+            tools.append(tool_info)
+        return {"server": server_name, "tools": tools, "tool_count": len(tools)}
+
     try:
+        url = server_config.get("url")
+        if url:
+            async with streamablehttp_client(url) as (read, write, _):
+                async with ClientSession(read, write) as session:
+                    return await _list_tools(session)
+
         command = server_config.get("command")
         args = server_config.get("args", [])
         env = server_config.get("env", None)
@@ -36,33 +58,13 @@ async def get_tools_from_server(
         if not command:
             return {
                 "server": server_name,
-                "error": "No command specified in configuration",
+                "error": "No command or url specified in configuration",
             }
 
-        # Create server parameters
         server_params = StdioServerParameters(command=command, args=args, env=env)
-
-        # Connect to the server
         async with stdio_client(server_params) as (read, write):
             async with ClientSession(read, write) as session:
-                # Initialize the session
-                await session.initialize()
-
-                # List available tools
-                tools_list = await session.list_tools()
-
-                # Extract tool information
-                tools = []
-                for tool in tools_list.tools:
-                    tool_info = {
-                        "name": tool.name,
-                        "description": tool.description,
-                    }
-                    if hasattr(tool, "inputSchema"):
-                        tool_info["inputSchema"] = tool.inputSchema
-                    tools.append(tool_info)
-
-                return {"server": server_name, "tools": tools, "tool_count": len(tools)}
+                return await _list_tools(session)
 
     except Exception as e:
         return {"server": server_name, "error": str(e)}

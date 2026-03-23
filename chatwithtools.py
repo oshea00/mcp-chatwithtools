@@ -17,6 +17,8 @@ from dotenv import load_dotenv
 from openai import OpenAI
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
+from mcp.client.sse import sse_client
+from mcp.client.streamable_http import streamablehttp_client
 
 from get_mcp_tools import get_tools
 
@@ -114,34 +116,34 @@ class MCPToolExecutor:
         if not server_config:
             return json.dumps({"error": f"Server {server_name} not configured"})
 
+        async def _call_tool(session: ClientSession) -> str:
+            await session.initialize()
+            result = await session.call_tool(tool_name, arguments=arguments)
+            if hasattr(result, "content"):
+                content_items = []
+                for item in result.content:
+                    if hasattr(item, "text"):
+                        content_items.append(item.text)
+                    else:
+                        content_items.append(str(item))
+                return "\n".join(content_items)
+            return str(result)
+
         try:
+            url = server_config.get("url")
+            if url:
+                async with streamablehttp_client(url) as (read, write, _):
+                    async with ClientSession(read, write) as session:
+                        return await _call_tool(session)
+
             command = server_config.get("command")
             args = server_config.get("args", [])
             env = server_config.get("env", None)
 
-            # Create server parameters
             server_params = StdioServerParameters(command=command, args=args, env=env)
-
-            # Connect to the server and execute the tool
             async with stdio_client(server_params) as (read, write):
                 async with ClientSession(read, write) as session:
-                    # Initialize the session
-                    await session.initialize()
-
-                    # Call the tool
-                    result = await session.call_tool(tool_name, arguments=arguments)
-
-                    # Extract content from result
-                    if hasattr(result, "content"):
-                        content_items = []
-                        for item in result.content:
-                            if hasattr(item, "text"):
-                                content_items.append(item.text)
-                            else:
-                                content_items.append(str(item))
-                        return "\n".join(content_items)
-
-                    return str(result)
+                    return await _call_tool(session)
 
         except Exception as e:
             return json.dumps({"error": str(e)})
