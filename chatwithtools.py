@@ -11,13 +11,12 @@ import shutil
 import sys
 import textwrap
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 from dotenv import load_dotenv
 from openai import OpenAI
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
-from mcp.client.sse import sse_client
 from mcp.client.streamable_http import streamablehttp_client
 
 from get_mcp_tools import get_tools

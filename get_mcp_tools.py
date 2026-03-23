@@ -13,7 +13,6 @@ from typing import Any, Dict, List
 import aiofiles
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
-from mcp.client.sse import sse_client
 from mcp.client.streamable_http import streamablehttp_client
 
 
