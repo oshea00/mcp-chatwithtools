@@ -51,7 +51,11 @@ python chatwithtools.py mcp.json gpt-4o
 
 # Architecture
 
-## Overview
+## MCP Architecture Overview
+
+![mcp architecture](images/mcparch.png)
+
+## Course Application Architecture
 
 `chatwithtools.py` demonstrates how to integrate MCP (Model Context Protocol) into a "tools with chat" application. It shows a clean architectural pattern with two key components:
 
@@ -59,9 +63,6 @@ python chatwithtools.py mcp.json gpt-4o
 2. **MCPToolExecutor** - Acts as a translation layer, converting OpenAI tool call responses into MCP server calls and completing the tool execution sequence
 
 This pattern enables an OpenAI LLM to dynamically discover and call tools hosted on any MCP server without hardcoding tool definitions.
-
-## Architecture
-
 The system consists of four main participants:
 
 1. **User** - Interacts via command-line interface
