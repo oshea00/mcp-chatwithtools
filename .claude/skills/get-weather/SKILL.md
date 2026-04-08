@@ -26,24 +26,19 @@ Parse the arguments provided after `/get-weather`:
 
 Build the JSON args object from the parsed arguments, then run this command:
 
-```bash
-MCPI=/home/oshea00/repos/mcpinspector/target/debug/mcpi
-MCP_CONFIG=/home/oshea00/repos/mcp-chatwithtools/mcp.json
-```
-
 **City only:**
 ```bash
-$MCPI --timeout 20 --mcp-config $MCP_CONFIG --server utilities --tool get_weather --args '{"city":"<city>"}'
+mcpi --timeout 20 --mcp-config mcp.json --server utilities --tool get_weather --args '{"city":"<city>"}'
 ```
 
 **City + state:**
 ```bash
-$MCPI --timeout 20 --mcp-config $MCP_CONFIG --server utilities --tool get_weather --args '{"city":"<city>","state":"<state>"}'
+mcpi --timeout 20 --mcp-config mcp.json --server utilities --tool get_weather --args '{"city":"<city>","state":"<state>"}'
 ```
 
 **City + state + country:**
 ```bash
-$MCPI --timeout 20 --mcp-config $MCP_CONFIG --server utilities --tool get_weather --args '{"city":"<city>","state":"<state>","country":"<country>"}'
+mcpi --timeout 20 --mcp-config mcp.json --server utilities --tool get_weather --args '{"city":"<city>","state":"<state>","country":"<country>"}'
 ```
 
 Display the tool output directly to the user. If the command fails, report the error and suggest checking that the weather server is running (`WEATHER_BASE_URL=http://localhost:8008`).
