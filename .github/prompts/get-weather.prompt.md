@@ -53,4 +53,12 @@ mcpi --timeout 20 --mcp-config mcp.json --server utilities --tool get_weather --
 mcpi --timeout 20 --mcp-config mcp.json --server utilities --tool get_weather --args '{"city":"<city>","state":"<state>","country":"<country>"}'
 ```
 
+If mcpi command is not available then suggest using cargo to install it. This will, of course require rust tooling. The crates url is [mcpi](https://crates.io/crates/mcpi)
+```bash
+cargo install mcpi
+```
+
 Display the tool output directly to the user. If the command fails, report the error and suggest checking that the weather server is running (`WEATHER_BASE_URL=http://localhost:8008`).
+
+
+
