@@ -1,14 +1,30 @@
 ---
-name: get-weather
-description: Get current weather for a city using the MCP weather server via mcpi in batch mode. Usage: /get-weather <city> [state] [country]
-tools: Bash
+description: Use this agent to get the weather using mcpi cli
+name: weather
+argument-hint: /weather <city> [state] [country]
+agent: agent
+tools:
+  - execute/runInTerminal
+  - search/fileSearch
+  - search/textSearch
+  - read/readFile
+  - edit/createFile
+  - edit/editFiles
+  - search/codebase
+  - search/listDirectory
+  - search/usages
+  - read/problems
+  - todo
+  - execute/getTerminalOutput
+  - execute/killTerminal
 ---
+
 
 # Get Weather
 
 Get current weather conditions using the local MCP weather server via `mcpi` in batch mode.
 
-## Usage
+## Prompt Usage
 
 `/get-weather <city> [state] [country]`
 
