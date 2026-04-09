@@ -19,7 +19,6 @@ tools:
   - execute/killTerminal
 ---
 
-
 # Get Weather
 
 Get current weather conditions using the local MCP weather server via `mcpi` in batch mode.
@@ -29,7 +28,8 @@ Examples:
 - `/weather Portland Oregon`
 - `/weather London UK`
 
-## Instructions
+
+# Instructions
 
 Parse the arguments provided after `/weather`:
 - First word: city (required)
@@ -37,6 +37,8 @@ Parse the arguments provided after `/weather`:
 - Third word: country (optional)
 
 Build the JSON args object from the parsed arguments, then run this command:
+
+If a forecast is requested, use the `get_forecast` tool instead of `get_weather` in the command below.
 
 **City only:**
 ```bash
