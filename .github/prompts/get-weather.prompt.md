@@ -24,18 +24,14 @@ tools:
 
 Get current weather conditions using the local MCP weather server via `mcpi` in batch mode.
 
-## Prompt Usage
-
-`/get-weather <city> [state] [country]`
-
 Examples:
-- `/get-weather Seattle`
-- `/get-weather Portland Oregon`
-- `/get-weather London UK`
+- `/weather Seattle`
+- `/weather Portland Oregon`
+- `/weather London UK`
 
 ## Instructions
 
-Parse the arguments provided after `/get-weather`:
+Parse the arguments provided after `/weather`:
 - First word: city (required)
 - Second word: state (optional)
 - Third word: country (optional)
